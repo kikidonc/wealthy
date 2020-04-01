@@ -1,0 +1,130 @@
+<div class="row" style="padding-bottom: 10px; padding-top: 10px;">
+    <div class="container bg-white border text-left rounded-lg shadow" style="padding-bottom: 20px; padding-top: 20px;">
+        <form [formGroup]="assetForm" class="form-horizontal" (ngSubmit)="saveAsset()" >
+          <!-- Section Name -->
+        <div class="row" style="padding-bottom: 10px;">
+          <div class="col-3 font-weight-bold">Name</div>
+          <div class="col-sm text-secondary" >
+            <input formControlName="name" class="form-control form-control-sm border-bottom border-primary" id="inputName" value="{{ asset?.name }}" placeholder="">
+          </div>
+        </div>
+        <!-- Section Category -->
+        <div class="row" style="padding-bottom: 10px;">
+          <div class="col-3 font-weight-bold">Category</div>
+          <div class="col-sm " >
+              <div *ngIf="categories">
+                <select formControlName="category" id="inputCategory" class="form-control form-control-sm border-bottom border-primary">
+                  <option>{{ asset?.category }}</option>
+                  <option *ngFor="let category of categories">
+                      {{ category.name }}
+                    </option>
+                </select>
+              </div>
+          </div>
+        </div>
+        <!-- Section Currency -->
+        <div class="row" style="padding-bottom: 10px;">
+          <div class="col-3 font-weight-bold">Currency</div>
+          <div class="col-sm text-secondary" >
+            <div *ngIf="currencies">
+              <select formControlName="currency" id="inputCurrency" class="form-control form-control-sm border-bottom border-primary">
+                <option>{{ asset?.currency }}</option>
+                <option *ngFor="let currency of currencies">
+                      {{ currency.code }}
+                  </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- Section Country -->
+        <div class="row" style="padding-bottom: 10px;">
+          <div class="col-3 font-weight-bold">Country</div>
+          <div class="col-sm text-secondary" >
+            <div *ngIf="countries">
+              <select formControlName="country" id="inputCountry" class="form-control form-control-sm border-bottom border-primary">
+                <option>{{ asset?.country }}</option>
+                <option *ngFor="let country of countries">
+                      {{ country.name }}
+                  </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- Section Group -->
+        <div class="row" style="padding-bottom: 10px;">
+          <div class="col-3 font-weight-bold">Group</div>
+          <div class="col-sm text-secondary" >
+            <div *ngIf="groups">
+              <select formControlName="group" id="inputGroup" class="form-control form-control-sm border-bottom border-primary">
+                <option>{{ asset?.group }}</option>
+                <option *ngFor="let group of groups">
+                    {{ group.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- EntryAmount  -->
+        <div class="row" style="padding-bottom: 10px;">
+          <div class="col-3 font-weight-bold">Entry Amount</div>
+          <div class="col-sm text-secondary" >
+            <input formControlName="entryAmount" class="form-control form-control-sm border-bottom border-primary" id="inputName" value="{{ asset?.entryAmount }}" placeholder="">
+          </div>
+        </div>
+        <!-- EntryDate -->
+        <div class="row" style="padding-bottom: 10px;">
+          <div class="col-3 font-weight-bold">Ownership Date</div>
+          <div class="col-5 text-secondary" >
+            <select formControlName="entryMonth" id="entryMonth" class="form-control form-control-sm border-bottom border-primary">
+              <option>{{ asset?.entryMonth }}</option>
+              <option *ngFor="let month of months">
+                {{ month }}
+              </option>
+            </select>
+          </div>
+          <div class="col-4 text-secondary" >
+            <input formControlName="entryYear" class="form-control form-control-sm border-bottom border-primary" id="entryYear" value="{{ asset?.entryYear }}" placeholder="YYYY">
+          </div>
+        </div>
+        <!-- ExitPeriod  -->
+        <div class="row" style="padding-bottom: 10px;">
+          <div class="col-3 font-weight-bold">Expected Exit</div>
+          <div class="col-5 text-secondary" >
+            <select formControlName="exitMonth" id="exitMonth" class="form-control form-control-sm border-bottom border-primary">
+              <option>{{ asset?.exitMonth }}</option>
+              <option *ngFor="let month of months">
+                {{ month }}
+              </option>
+            </select>
+          </div>
+          <div class="col-4 text-secondary" >
+            <input formControlName="exitYear" class="form-control form-control-sm border-bottom border-primary" id="exitYear" value="{{ asset?.exitYear }}" placeholder="YYYY">
+          </div>
+        </div>
+        <!-- Section increase -->
+        <div class="row" style="padding-bottom: 10px;">
+          <div class="col-3 font-weight-bold">Annual increase</div>
+          <div class="col-4 text-secondary" >
+            <select formControlName="increaseType" id="increaseType" class="form-control form-control-sm border-bottom border-primary">
+              <option>{{ asset?.increaseType }}</option>
+              <option>Percentage</option>
+              <option>Value</option>
+            </select>
+          </div>
+          <div class="col-sm text-secondary" >
+            <input formControlName="increaseValue" class="form-control form-control-sm border-bottom border-primary" id="inputIncreaseValue" value="{{ asset?.increaseValue }}" placeholder="">
+          </div>
+        </div>
+        <!-- Section SAVE -->
+        <div class="row" style="padding-bottom: 10px;">
+          <div class="col-8 text-right font-weight-bold"></div>
+          <div class="col-2 text-right">
+              <button type="button" (click)='cancelAddAsset()' class="btn btn-outline-primary btn-sm">CANCEL</button>
+          </div>
+          <div class="col-2 text-right">
+            <button type="button" (click)='saveAsset()' class="btn btn-primary btn-sm">SAVE</button>
+        </div>
+        </div>
+      </form>
+  </div>
+</div>

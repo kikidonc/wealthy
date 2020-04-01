@@ -1,0 +1,182 @@
+
+
+<div class="text-center mb-4" style="padding-top: 50px;">
+  <div *ngIf="authService.user$ | async; then authenticated else guest">
+  </div>
+  <ng-template #guest>
+    <button class="btn btn-primary btn-sm" (click)="signInWithGoogle()" >
+      <img src="assets/google-logo.svg" style="height: 15px;" /> Login with Google
+    </button>
+    <h5 class="text-secondary" style="padding-top: 20px; padding-bottom: 20px;">or</h5>
+
+    <div class="text-center" >
+      <!-- SIGN UP -->
+     <div *ngIf="isSignup" style="padding-bottom: 15px;">
+       <h3 style="padding-bottom: 15px;">Create Account</h3>
+       <button class="btn btn-sm btn-outline-primary" (click)="changeType('login')" >Login</button>
+       <div class="row" style="padding-bottom: 10px; padding-top: 30px;">
+         <div class="col-3"></div>
+         <div class="col-6">
+           <div class="container bg-white border text-left rounded-lg shadow" style="padding-bottom: 20px; padding-top: 20px;">
+             <form [formGroup]="signupForm" class="form-horizontal" (ngSubmit)="onSubmitSignup()" >
+               <!-- Section Name -->
+               <div class="row" style="padding-bottom: 10px;">
+                 <div class="col-4 font-weight-bold">Name</div>
+                 <div class="col-sm text-secondary" >
+                   <input formControlName="name" class="form-control form-control-sm border-bottom border-primary" id="inputName" value="" placeholder="">
+                 </div>
+               </div>
+
+               <!-- Section Age -->
+               <div class="row" style="padding-bottom: 10px;">
+                 <div class="col-4 font-weight-bold">Age</div>
+                 <div class="col-sm text-secondary" >
+                   <input formControlName="age" class="form-control form-control-sm border-bottom border-primary" id="inputAge" value="" placeholder="">
+                 </div>
+               </div>
+
+               <!-- Section Country -->
+               <div class="row" style="padding-bottom: 10px;">
+                 <div class="col-4 font-weight-bold">Country</div>
+                 <div class="col-sm text-secondary" >
+                   <div *ngIf="countries">
+                     <select formControlName="country" id="inputCountry" class="form-control form-control-sm border-bottom border-primary">
+                       <option></option>
+                       <option *ngFor="let country of countries">
+                             {{ country.name }}
+                         </option>
+                     </select>
+                   </div>
+                 </div>
+               </div>
+
+               <!-- Section Currency -->
+               <div class="row" style="padding-bottom: 10px;">
+                <div class="col-4 font-weight-bold">Account Currency</div>
+                <div class="col-sm text-secondary" >
+                  <div *ngIf="currencies">
+                    <select formControlName="currency" id="inputCurrency" class="form-control form-control-sm border-bottom border-primary">
+                      <option></option>
+                      <option *ngFor="let currency of currencies">
+                            {{ currency.name }}
+                        </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+               <!-- Section Email -->
+               <div class="row" style="padding-bottom: 10px;">
+                 <div class="col-4 font-weight-bold">Email</div>
+                 <div class="col-sm text-secondary" >
+                   <input formControlName="email" class="form-control form-control-sm border-bottom border-primary" id="inputEmail" value="" placeholder="">
+                   <div class="text-center text-danger" *ngIf="email.invalid && email.dirty">
+                     You must enter a valid email
+                   </div>
+                 </div>
+
+               </div>
+
+               <!-- Section Password -->
+               <div class="row" style="padding-bottom: 10px;">
+                 <div class="col-4 font-weight-bold">Password</div>
+                 <div class="col-sm text-secondary" >
+                   <input formControlName="password" type="password" class="form-control form-control-sm border-bottom border-primary" id="inputPassword" value="" placeholder="">
+                   <div class="invalid-feedback" *ngIf="password.invalid && password.dirty">
+                     Password must be at least 6 characters long
+                   </div>
+                 </div>
+               </div>
+
+               <div class="row" style="padding-bottom: 10px;">
+                 <div class="col-4 font-weight-bold">Confirm password</div>
+                 <div class="col-sm text-secondary" >
+                   <input formControlName="passwordConfirm" type="password" class="form-control form-control-sm border-bottom border-primary" id="inputPasswordConfirm" value="" placeholder="">
+                   <div class="invalid-feedback"  *ngIf="passwordConfirm.dirty && !passwordDoesMatch">
+                     Password does not match
+                   </div>
+                 </div>
+               </div>
+
+               <div class="row text-right" style="padding-top: 15px;padding-bottom: 10px">
+                 <div class="col-8 "></div>
+                 <div class="col-4 text-right">
+                   <button class="btn btn-sm btn-primary" color="accent" type="submit"
+                   [disabled]="signupForm.invalid || !passwordDoesMatch || loading">Submit</button>
+                 </div>
+               </div>
+
+             </form>
+           </div>
+         </div>
+         <div class="col-3"></div>
+       </div>
+     </div>
+
+     <!-- SIGN IN -->
+     <div *ngIf="isLogin" style="padding-bottom: 15px;">
+       <!-- <h3 style="padding-bottom: 15px;">Sign In</h3> -->
+       <button class="btn btn-sm btn-outline-primary"  (click)="changeType('signup')">Register</button>
+
+       <div class="row" style="padding-bottom: 10px; padding-top: 30px;">
+         <div class="col-4"></div>
+         <div class="col-4">
+           <div class="container bg-white border text-left rounded-lg shadow" style="padding-bottom: 20px; padding-top: 20px;">
+             <form [formGroup]="signinForm" class="form-horizontal" (ngSubmit)="onSubmitLogin()" >
+               <!-- Section Email -->
+               <div class="row" style="padding-bottom: 10px;">
+                 <div class="col-3 font-weight-bold">Email</div>
+                 <div class="col-sm text-secondary" >
+                   <input formControlName="email" class="form-control form-control-sm border-bottom border-primary" id="inputEmail" value="" placeholder="">
+                   <div class="text-center text-danger" *ngIf="email.invalid && email.dirty">
+                     You must enter a valid email
+                   </div>
+                 </div>
+
+               </div>
+
+               <!-- Section Password -->
+               <div class="row" style="padding-bottom: 10px;">
+                 <div class="col-3 font-weight-bold">Password</div>
+                 <div class="col-sm text-secondary" >
+                   <input formControlName="password" type="password" class="form-control form-control-sm border-bottom border-primary" id="inputPassword" value="" placeholder="">
+                   <div class="invalid-feedback" *ngIf="password.invalid && password.dirty">
+                     Password must be at least 6 characters long
+                   </div>
+                 </div>
+               </div>
+
+               <div class="row text-right" style="padding-top: 15px;padding-bottom: 10px">
+                 <div class="col-8 "></div>
+                 <div class="col-4 text-right">
+                   <button class="btn btn-sm btn-primary" color="accent" type="submit"
+                   [disabled]="signinForm.invalid || !passwordDoesMatch || loading">Submit</button>
+                 </div>
+               </div>
+             </form>
+           </div>
+           <div class="row" style="padding-bottom: 10px; padding-top: 10px;">
+             <div class="col-3"></div>
+             <!-- <div class="col-3">
+               <button *ngIf="isPasswordReset" class="btn btn-sm btn-outline-secondary" type="submit" [disabled]="loading">Send Reset Email</button>
+             </div> -->
+             <!-- <div class="col-2"></div> -->
+             <div class="col-6">
+               <button class="btn btn-sm btn-outline-primary" *ngIf="isLogin && !isPasswordReset" (click)="changeType('reset')">Forgot password?</button>
+             </div>
+             <div class="col-3"></div>
+           </div>
+         </div>
+         <div class="col-4"></div>
+        </div>
+
+       <div *ngIf="isPasswordReset" style="padding-bottom: 15px;">
+         <h3>Reset Password</h3>
+         <button class="btn btn-sm btn-outline-primary" (click)="changeType('login')">Back</button>
+      </div>
+
+  <ng-template #authenticated>
+    <app-profile></app-profile>
+  </ng-template>
+
+</div>

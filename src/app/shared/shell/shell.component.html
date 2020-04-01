@@ -1,0 +1,60 @@
+
+
+<div *ngIf="authService.user$  | async; else logout">
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="col-2"></div>
+    <div class="col-8">
+      <div class="row">
+        <a routerLink="/" routerLinkActive="active-link" class="navbar-brand text-danger">Wealthy</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExample04">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a routerLink="/dashboard" routerLinkActive="active-link" class='nav-link text-white'>Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/portfolio" routerLinkActive="active-link" class='nav-link text-white'>Portfolio</a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/stocks" routerLinkActive="active-link" class='nav-link text-white'>Stocks</a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/assets" routerLinkActive="active-link" class='nav-link text-white'>Assets</a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/profile" routerLinkActive="active-link" class='nav-link text-white align-right'>👤</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-2"></div>
+  </nav>
+</div>
+
+<ng-template #logout>
+  <nav class="navbar navbar-expand-md  bg-transparent">
+    <div class="col-1"></div>
+    <div class="col-2">
+      <div class="row"><a routerLink="/" routerLinkActive="active-link" class="navbar-brand text-primary">Wealthy</a></div>
+    </div>
+    <div class="col-7"></div>
+    <div class="col-1">
+      <div class="row">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <button routerLink="/login" routerLinkActive="active-link" class='btn btn-primary text-white'>Login</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</ng-template>
+
+<div class='container-fluid' >
+  <!-- TRANSCLUSION -->
+  <ng-content></ng-content>
+</div>

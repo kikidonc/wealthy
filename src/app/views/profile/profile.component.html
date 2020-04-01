@@ -1,0 +1,218 @@
+
+<div class="container">
+  <div *ngIf="user$ | async">
+    <div *ngIf="userProfile">
+      <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10 " >
+          <div class="row" style="padding-bottom: 10px; padding-top: 10px;">
+            <!-- COL 1 -->
+            <div class="col-7" >
+              <!-- USER PROFILE -->
+                <div class="row" style="padding-bottom: 10px; padding-top: 10px;">
+                    <div class="container bg-white border text-left rounded-lg shadow" style="padding-bottom: 20px; padding-top: 20px;">
+                      <div class="row" style="padding-bottom: 10px;">
+                        <h6><div class="col font-weight-bold">User Profile</div></h6>
+                      </div>
+                        <div *ngIf="!profileEdit">
+                          <div class="row" style="padding-bottom: 10px;">
+                            <div class="col-3 font-weight-bold">Name</div>
+                            <div class="col-sm text-secondary" (click)="editProfile()" >{{ userProfile['name'] }} </div>
+                          </div>
+                          <div class="row" style="padding-bottom: 10px;">
+                            <div class="col-3 font-weight-bold">Email</div>
+                            <div class="col-sm text-secondary" (click)="editProfile()" >{{ userProfile['email'] }}</div>
+                          </div>
+                          <div class="row" style="padding-bottom: 10px;">
+                            <div class="col-3 font-weight-bold">Country</div>
+                            <div class="col-sm text-secondary" (click)="editProfile()" >{{ userProfile['country'] }}</div>
+                          </div>
+                          <div class="row" style="padding-bottom: 10px;">
+                            <div class="col-3 font-weight-bold">Currency</div>
+                            <div class="col-sm text-secondary" (click)="editProfile()" >{{ userProfile['currency'] }}</div>
+                          </div>
+                          <div class="row" style="padding-bottom: 10px;">
+                            <div class="col-3 font-weight-bold">Portfolio Life</div>
+                            <div class="col-sm text-secondary" (click)="editProfile()" >{{ userProfile['life'] }} years</div>
+                          </div>
+                        </div>
+                      <div *ngIf="profileEdit">
+                        <form [formGroup]="profileForm" class="form-horizontal" (ngSubmit)="onSubmitProfile()" >
+                          <div class="row" style="padding-bottom: 10px;">
+                            <div class="col-3 font-weight-bold">Name</div>
+                            <div class="col-sm text-secondary" >
+                              <input formControlName="name" class="form-control form-control-sm border-bottom border-primary" id="inputname" value="{{ userProfile['name'] }}" placeholder="">
+                            </div>
+                          </div>
+                          <div class="row" style="padding-bottom: 10px;">
+                            <div class="col-3 font-weight-bold">Email</div>
+                            <div class="col-sm text-secondary" >
+                              <input formControlName="email" class="form-control form-control-sm border-bottom border-primary" id="inputEmail" value="{{ userProfile['email'] }}" placeholder="">
+                            </div>
+                          </div>
+                          <div class="row" style="padding-bottom: 10px;">
+                            <div class="col-3 font-weight-bold">Country</div>
+                            <div class="col-sm text-secondary" >
+                              <input formControlName="country" class="form-control form-control-sm border-bottom border-primary" id="inputCountry" value="{{ userProfile['country'] }}" placeholder="">
+                            </div>
+                          </div>
+                          <div class="row" style="padding-bottom: 10px;">
+                            <div class="col-3 font-weight-bold">Currency</div>
+                            <div class="col-sm text-secondary" >
+                              <div *ngIf="currencies">
+                                <select formControlName="currency" id="inputCurrency" class="form-control form-control-sm border-bottom border-primary">
+                                    <option>{{ userProfile['currency'] }}</option>
+                                    <option *ngFor="let currency of currencies">
+                                        {{ currency.code }}
+                                    </option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row" style="padding-bottom: 15px;">
+                            <div class="col-3 font-weight-bold">Portfolio Life</div>
+                            <div class="col-sm text-secondary" >
+                              <input formControlName="life" class="form-control form-control-sm border-bottom border-primary" id="inputLife" value="{{ userProfile['life'] }}" placeholder="Number of years for your portfolio">
+                            </div>
+                          </div>
+                          <div class="row" style="padding-bottom: 10px;">
+                            <div class="col-10 font-weight-bold"></div>
+                            <div class="col-2 text-right">
+                                <button type="button" (click)='onSubmitProfile()' class="btn btn-outline-primary btn-sm">SAVE</button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                </div>
+              <!-- CATEGORIES SECTION -->
+              <div class="row" style="padding-bottom: 10px; padding-top: 10px;">
+                  <div class="container border bg-white text-left rounded-lg shadow" style="padding-bottom: 20px; padding-top: 20px;">
+                    <div class="row" style="padding-bottom: 10px;">
+                      <h6><div class="col font-weight-bold">Categories</div></h6>
+                    </div>
+                    <div *ngIf="categories">
+                      <div *ngFor="let cat of categories">
+                        <div *ngIf="cat['name']">
+                          <div class="row" style="padding-bottom: 10px;">
+                            <div class="col-1 text-secondary" (click)="deleteCategory(cat['name'])" >🗑</div>
+                            <div class="col font-secondary">{{ cat['name'] }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div *ngIf="!categoryEdit">
+                      <div class="row" style="padding-bottom: 10px;">
+                        <div class="col text-right">
+                            <button type="button" (click)='addCategory()' class="btn btn-outline-primary btn-sm">ADD</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="categoryEdit">
+                      <form [formGroup]="categoryForm" class="form-horizontal" (ngSubmit)="saveCategory()" >
+                          <div class="row" style="padding-bottom: 10px;">
+                              <!-- <div class="col-3 text-secondary">New Category</div> -->
+                              <div class="col-5 text-secondary" >
+                                  <input formControlName="name" class="form-control form-control-sm border-bottom border-primary" id="catName" value="" placeholder="name">
+                                </div>
+                            <div class="col-2 text-right">
+                                <button type="button" (click)='saveCategory()' class="btn btn-outline-primary btn-sm">SAVE</button>
+                            </div>
+                            <div class="col-2 text-right">
+                                <button type="button" (click)='cancelAddCategory()' class="btn btn-outline-secondary btn-sm">CANCEL</button>
+                            </div>
+                          </div>
+                      </form>
+                    </div>
+
+
+                  </div>
+              </div>
+            </div>
+
+            <!-- SEPARATOR -->
+            <div class="col-sm">
+            </div>
+
+            <!-- COL 2 -->
+            <div class="col-4" >
+                <!-- LOGOUT SECTION -->
+                <div class="row" style="padding-bottom: 10px; padding-top: 10px;">
+                  <div class="container bg-white text-right  " style="padding-bottom: 20px; padding-top: 20px;">
+                    <button class="btn btn-danger btn-sm" (click)="logout()">LOGOUT</button>
+                  </div>
+                </div>
+                <!-- GROUP SECTION -->
+                <div class="row" style="padding-bottom: 10px; padding-top: 10px;">
+                  <div class="container border bg-white text-left rounded-lg shadow" style="padding-bottom: 20px; padding-top: 20px;">
+                    <div class="row" style="padding-bottom: 10px;">
+                      <h6><div class="col font-weight-bold">Groups</div></h6>
+                    </div>
+
+
+                    <div *ngIf="!groupsEdit">
+                      <div *ngIf="groups">
+                        <div *ngFor="let group of groups">
+                          <div class="row" style="padding-bottom: 10px;">
+                            <div class="col-12 text-secondary text-left" (click)="editGroup(group)">{{ group.name }}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row" style="padding-bottom: 10px;">
+                        <div class="col text-right">
+                            <button type="button" (click)='addGroup()' class="btn btn-outline-primary btn-sm">ADD</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div *ngIf="groupsEdit">
+                      <form [formGroup]="groupForm" class="form-horizontal" (ngSubmit)="saveGroup()" >
+                          <div class="row" style="padding-bottom: 10px;">
+                            <div class="col-3 text-secondary">Name: </div>
+                            <div class="col-8 text-secondary" >
+                                <input formControlName="name" class="form-control form-control-sm border-bottom border-primary" id="groupName" value="{{ editedGroup?.name }}" placeholder="">
+                            </div>
+                            <div class="col text-secondary"></div>
+                          </div>
+                          <div class="row" style="padding-bottom: 10px;">
+                            <div class="col-4 text-center">
+                              <button type="button" (click)="deleteGroup()" class="btn btn-outline-danger btn-sm">DELETE</button>
+                            </div>
+                            <div class="col-4 text-center">
+                                <button type="button" (click)='saveGroup()' class="btn btn-outline-primary btn-sm">SAVE</button>
+                            </div>
+                            <div class="col-4 text-center">
+                                <button type="button" (click)='cancelAddGroup()' class="btn btn-outline-secondary btn-sm">CANCEL</button>
+                            </div>
+                          </div>
+                      </form>
+                    </div>
+
+
+
+
+
+                  </div>
+                </div>
+            </div>
+          </div>
+        <!-- END COL 10      -->
+        </div>
+        <div class="col-1"></div>
+      </div>
+      <div class="row" style="padding-top: 20px;">
+        <div class="col"></div>
+        <div class="col-8 ">
+            <button class="btn btn-outline-danger btn-sm" (click)="deleteAccount()"><i name="iconSignOutAlt" fa></i>DELETE ACCOUNT</button>
+        </div>
+        <div class="col"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+

@@ -1,0 +1,190 @@
+<div class="container " style=" padding-top: 20px;">
+  <div *ngIf="authService.user$ | async">
+    <div class="row" style="padding-top: 40px;">
+      <div class="col-12">
+        <div class="row" style="padding-bottom: 10px; padding-top: 10px;">
+        <!-- COL 1 -->
+        <div class="col-8">
+          <!-- TABLE OF ASSETS -->
+          <div class="row" style="padding-bottom: 10px;">
+            <div class="container border bg-white rounded-lg shadow" style="padding-bottom: 20px; padding-top: 20px;">
+              <div class="row" style="padding-bottom: 10px;">
+                <div class="col-10 text-left ">
+                  <div class="dashhead">
+                    <h5 class="text-secondary">Your Assets</h5>
+                  </div>
+                </div>
+                <div class="col-2 text-right">
+                  <div *ngIf="!editMode"><button type="button" (click)='addAsset()' class="btn btn-outline-primary btn-sm">ADD</button></div>
+                </div>
+              </div>
+
+              <!-- ASSET LIST VIEW -->
+                <div *ngIf="assets">
+                  <table class="table table-sm">
+                    <thead>
+                      <th>Name</th>
+                      <th>Category</th>
+                      <th>Country</th>
+                      <th>Currency</th>
+                      <th>Group</th>
+                    </thead>
+                    <tbody *ngFor="let asset of assets ">
+                      <tr (click)="showAssetProfile(asset.id)">
+                        <td>{{ asset.name }}</td>
+                        <td>{{ asset.category }}</td>
+                        <td>{{ asset.country }}</td>
+                        <td>{{ asset.currency }}</td>
+                        <td>{{ asset.group }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+            </div>
+
+          </div>
+
+          <!-- SHOW ASSET PROFILE -->
+          <div *ngIf="assetProfileDisplayed">
+
+              <div class="row" style="padding-bottom: 10px;">
+                <div class="container bg-white border text-left rounded-lg shadow" style="padding-bottom: 20px; padding-top: 20px;">
+                  <div class="row" style="padding-bottom: 10px;">
+                    <div class="col-8 text-left ">
+                      <div class="dashhead"><h5 class="text-secondary">Asset Profile</h5></div>
+                    </div>
+                    <div class="col-2 text-right">
+                      <div *ngIf="!editMode"><button type="button" (click)='addAsset(assetDisplayed)' class="btn btn-outline-primary btn-sm">EDIT</button></div>
+                    </div>
+                    <div class="col-2 text-right">
+                      <div *ngIf="!editMode"><button type="button" (click)='deleteAsset(assetDisplayed)' class="btn btn-outline-danger btn-sm">DELETE</button></div>
+                    </div>
+                  </div>
+
+                  <div *ngIf="assetDisplayed">
+                    <div class="row" style="padding-bottom: 10px;">
+                      <div class="col-3 font-weight-bold">Name</div>
+                      <div class="col-sm text-secondary" (click)="editProfile()" >{{ assetDisplayed.name }}</div>
+                    </div>
+                    <div class="row" style="padding-bottom: 10px;">
+                      <div class="col-3 font-weight-bold">Category</div>
+                      <div class="col-sm text-secondary" (click)="editProfile()" >{{ assetDisplayed.category}} </div>
+                    </div>
+                    <div class="row" style="padding-bottom: 10px;">
+                      <div class="col-3 font-weight-bold">Country</div>
+                      <div class="col-sm text-secondary" (click)="editProfile()" >{{ assetDisplayed.country }}</div>
+                    </div>
+                    <div class="row" style="padding-bottom: 10px;">
+                      <div class="col-3 font-weight-bold">Entry Value</div>
+                      <div class="col-sm text-secondary" (click)="editProfile()" >{{ assetDisplayed?.entryAmount | number: '0.'}} {{ assetDisplayed?.currency }}</div>
+                    </div>
+                    <div class="row" style="padding-bottom: 10px;">
+                      <div class="col-3 font-weight-bold">Entry Date</div>
+                      <div class="col-sm text-secondary" (click)="editProfile()" >{{ assetDisplayed?.entryMonth }}/{{ assetDisplayed?.entryYear }}</div>
+                    </div>
+                    <div class="row" style="padding-bottom: 10px;">
+                      <div class="col-3 font-weight-bold">Exit Date</div>
+                      <div class="col-sm text-secondary" (click)="editProfile()" >{{ assetDisplayed?.exitMonth }}/{{ assetDisplayed?.exitYear }}</div>
+                    </div>
+                    <div class="row" style="padding-bottom: 10px;">
+                      <div class="col-3 font-weight-bold">Annual {{ assetDisplayed.increaseType }}</div>
+                      <div class="col-sm text-secondary" (click)="editProfile()" >{{ assetDisplayed.increaseValue }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row" style="padding-bottom: 10px;">
+                <div class="container bg-white border text-left rounded-lg shadow" style="padding-bottom: 20px; padding-top: 20px;">
+                  <div class="row" style="padding-bottom: 10px;">
+                    <div class="col-8 text-left ">
+                      <div class="dashhead"><h5 class="text-secondary">Datasets</h5></div>
+                    </div>
+                  </div>
+                  <div class="row" style="padding-bottom: 10px;">
+                    <div *ngIf="chartData.length > 0">
+                      <ngx-charts-line-chart
+                        [view]="view"
+                        [scheme]="colorScheme"
+                        [results]="chartData"
+                        [gradient]="gradient"
+                        [xAxis]="showXAxis"
+                        [yAxis]="showYAxis"
+                        [legend]="showLegend"
+                        [showXAxisLabel]="showXAxisLabel"
+                        [showYAxisLabel]="showYAxisLabel"
+                        [xAxisLabel]="xAxisLabel"
+                        [yAxisLabel]="yAxisLabel"
+                        (select)="onSelect($event)">
+                        </ngx-charts-line-chart>
+                      </div>
+                  </div>
+
+                  <div *ngIf="dataset">
+                    <table class="table table-sm">
+                      <thead>
+                        <th>#</th>
+                        <th>Asset</th>
+                        <th>Month</th>
+                        <th>Year</th>
+                        <th>Value</th>
+                      </thead>
+                      <tbody *ngFor="let data of dataset ">
+                        <tr >
+                          <td>{{ data.count }}</td>
+                          <td>{{ data.asset }}</td>
+                          <td>{{ data.periodMonth }}</td>
+                          <td>{{ data.periodYear }}</td>
+                          <td>{{ data.value| number: '0.' }} {{ assetDisplayed?.currency }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          <!-- ASSET EDIT VIEW -->
+          <div *ngIf="assetsService.assetEditMode">
+            <div class="row" style="padding-bottom: 10px;">
+              <div class="col-12 text-left ">
+                <app-add-asset></app-add-asset>
+              </div>
+            </div>
+          </div>
+
+          <!-- END COL 1 -->
+        </div>
+
+
+        <!-- SEPARATOR -->
+        <div class="col-sm">
+        </div>
+
+        <!-- COL 2 -->
+        <div class="col-3" >
+          <div class="row" style="padding-bottom: 10px; ">
+            <div class="container border bg-white text-center rounded-lg shadow" style="padding-bottom: 20px; padding-top: 20px;">
+              <div class="text-primary"><h4>{{ assetsQty }}</h4></div>
+              <div class="text-secondary" style="padding-bottom: 15px;">Number of assets</div>
+
+              <div class="text-primary"><h4>{{ assetsCategoryQty }}</h4></div>
+              <div class="text-secondary" style="padding-bottom: 15px;">Number of Category</div>
+
+              <div class="text-primary"><h4>{{ assetsCurrencyQty }}</h4></div>
+              <div class="text-secondary" style="padding-bottom: 15px;">Number of Currency</div>
+
+              <div class="text-primary"><h4>{{ assetsCountryQty }}</h4></div>
+              <div class="text-secondary" style="padding-bottom: 15px;">Number of Country</div>
+            </div>
+          </div>
+        </div>
+
+        </div>
+        <!-- <div class="col"> -->
+      </div>
+    </div>
+
+  </div>
+
+</div>

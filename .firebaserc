@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "wealthy-dev-1e96e": {
+      "hosting": {
+        "wealthy": [
+          "wealthy-dev-1e96e"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "wealthy-dev-1e96e"
+  }
+}
